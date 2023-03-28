@@ -5,7 +5,8 @@ import requests
 from sys import argv
 
 
-if __name__ == "__main__":
+def dataGatherer():
+    """gathers data """
 
     # retrieves name
     api_url_user = f"https://jsonplaceholder.typicode.com/users/{argv[1]}"
@@ -27,3 +28,7 @@ if __name__ == "__main__":
 
     print(
         f"Employee {name} is done with tasks ({pending_tasks}/{len(todo_list)})")
+
+
+if __name__ == "__main__":
+    dataGatherer()
