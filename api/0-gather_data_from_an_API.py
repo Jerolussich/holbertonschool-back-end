@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Task 0 module"""
 
 import requests
 from sys import argv

@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Task 2 module"""
 
 import requests
 import json
