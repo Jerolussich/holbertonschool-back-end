@@ -1,40 +1,29 @@
 #!/usr/bin/python3
-"""Task 2 module"""
-
+"""
+Module 2-export_to_json
+"""
+from json import dump
 import requests
-import json
 from sys import argv
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
-    # retrieves name
-    api_url_user = f"https://jsonplaceholder.typicode.com/users/{argv[1]}"
-    user_list = requests.get(api_url_user).json()
-    name = user_list["name"]
+    user_id = int(argv[1])
 
-    # retrieves todos info from user id
-    params = {"userId": argv[1]}
-    api_url_todo = "https://jsonplaceholder.typicode.com/todos"
-    todo_list = requests.get(api_url_todo, params=params).json()
+    resp = requests.get(
+        'https://jsonplaceholder.typicode.com/users/{}'.format(user_id))
+    username = resp.json().get('username')
 
-    pending_tasks = 0
+    resp = requests.get(
+        'https://jsonplaceholder.typicode.com/users/{}/todos'.format(user_id))
 
-    with open(f"{argv[1]}.json", "w+") as file:
+    tasks = {}
+    tasks.setdefault(user_id, [])
+    for task in resp.json():
+        tasks[user_id].append(dict(task=task['title'],
+                                   completed=task['completed'],
+                                   username=username))
 
-        new_dict = {argv[1]: []}
-
-        for item in todo_list:
-
-            completed_value_item = item["completed"]
-
-            item.pop("id")
-            item.pop("userId")
-            item.pop("completed")
-
-            item["task"] = item.pop("title")
-            item["completed"] = completed_value_item
-            item["username"] = name
-            new_dict[argv[1]].append(item)
-
-        file.write(json.dumps(new_dict))
+    with open(str(user_id) + '.json', 'w') as file:
+        dump(tasks, file)
