@@ -1,15 +1,11 @@
-#!/usr/bin/python3
-"""Task 0 module"""
-
 import requests
 from sys import argv
 
 
 def dataGatherer():
-    """gathers data """
-
     # retrieves name
-    api_url_user = f"https://jsonplaceholder.typicode.com/users/{argv[1]}"
+    api_url_user = "https://jsonplaceholder.typicode.com/users/{}".format(
+        argv[1])
     data_api_user = requests.get(api_url_user)
     user_list = data_api_user.json()
     name = user_list["name"]
@@ -21,13 +17,12 @@ def dataGatherer():
     todo_list = data_api_todo.json()
 
     pending_tasks = 0
-
     for item in todo_list:
         if item["completed"] == True:
             pending_tasks += 1
 
-    print(
-        f"Employee {name} is done with tasks ({pending_tasks}/{len(todo_list)})")
+    print("Employee {} is done with tasks ({}/{}).".format(name,
+          pending_tasks, len(todo_list)))
 
 
 if __name__ == "__main__":
